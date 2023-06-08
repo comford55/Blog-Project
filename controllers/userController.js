@@ -9,26 +9,23 @@ const passwordEncrypt = (password) => {
 };
 
 const createUser = async (req, res) => {
-  const { firstName, lastName, username, email, password } = req.body;
+  try {
+    const { firstName, lastName, username, email, password } = req.body;
 
-  passwordEncrypt(password)
-    .then((passwordEncrypted) => {
-      const user = new User({
-        firstName: firstName,
-        lastName: lastName,
-        username: username,
-        email: email,
-        password: passwordEncrypted,
-      });
+    const passwordEncrypted = await passwordEncrypt(password);
 
-      return user.save();
-    })
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch((err) => {
-      const errorHandling = middlewares.BadRequest.badRequest(res, err.message);
+    const user = new User({
+      firstName,
+      lastName,
+      username,
+      email,
+      password: passwordEncrypted,
     });
+    const result = await user.save();
+    res.status(201).json(result);
+  } catch (err) {
+    const errorHandling = middlewares.BadRequest.badRequest(res, err.message);
+  }
 };
 
 const getUserProfile = async (req, res) => {
