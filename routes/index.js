@@ -1,4 +1,4 @@
-const Blog = require('./blog');
+const Blog = require('./blogRoutes');
 
 const express = require('express');
 const router = express.Router();
