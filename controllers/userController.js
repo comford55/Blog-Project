@@ -9,17 +9,13 @@ const passwordEncrypt = (password) => {
 };
 
 const createUser = async (req, res) => {
-  const fname = req.body.firstName;
-  const lname = req.body.lastName;
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
+  const { firstName, lastName, username, email, password } = req.body;
 
   passwordEncrypt(password)
     .then((passwordEncrypted) => {
       const user = new User({
-        firstName: fname,
-        lastName: lname,
+        firstName: firstName,
+        lastName: lastName,
         username: username,
         email: email,
         password: passwordEncrypted,
