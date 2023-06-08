@@ -15,6 +15,6 @@ db.then(() => {
   app.listen(Port, Hostname, () => {
     console.log(`Server running on port ${Port}`);
   });
-}).catch(err => {
-    console.log(err);
+}).catch((err) => {
+  console.log(err);
 });
