@@ -34,4 +34,13 @@ const createUser = async (req, res) => {
     });
 };
 
+const getUserProfile = async (req, res) => {
+  const userId = req.params.id;
+  const user = await User.findOne(userId);
+  if (!user) {
+    const errorHandling = middlewares.NotFound.notFound(res, "User not found");
+  }
+  res.status(200).json({data: user});
+};
+
 module.exports = { createUser };
