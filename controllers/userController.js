@@ -2,6 +2,7 @@ const { User } = require("../models");
 const bcrypt = require("bcrypt");
 
 const middlewares = require("../middlewares");
+const utils = require("../utils");
 
 const passwordEncrypt = (password) => {
   return bcrypt.hash(password, 12);
@@ -36,11 +37,25 @@ const createUser = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
   const userId = req.params.id;
-  const user = await User.findOne(userId);
-  if (!user) {
-    const errorHandling = middlewares.NotFound.notFound(res, "User not found");
+  const validUserId = utils.validUserId(userId);
+  if (!validUserId) {
+    await middlewares.BadRequest.badRequest(res, "Invalid user ID");
+    return;
   }
-  res.status(200).json({data: user});
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      await middlewares.NotFound.notFound(res, "User not found");
+      return;
+    }
+
+    res.status(200).json({ data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
-module.exports = { createUser };
+module.exports = { createUser, getUserProfile };
