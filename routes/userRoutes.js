@@ -8,9 +8,7 @@ router.get("/users", (req, res, next) => {
 });
 
 router.post("/user", async (req, res, next) => {
-  try {
-    await controllers.userController.createUser(req);
-  } catch (err) {}
+  const creatUser = await controllers.userController.createUser(req, res);
 });
 
 module.exports = router;

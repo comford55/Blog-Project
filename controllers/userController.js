@@ -1,11 +1,13 @@
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
 
+const middlewares = require("../middlewares");
+
 const passwordEncrypt = (password) => {
   return bcrypt.hash(password, 12);
 };
 
-const createUser = async (req) => {
+const createUser = async (req, res) => {
   const fname = req.body.firstName;
   const lname = req.body.lastName;
   const username = req.body.username;
@@ -28,7 +30,7 @@ const createUser = async (req) => {
       res.status(201).json(result);
     })
     .catch((err) => {
-      console.log(err);
+      const errorHandling = middlewares.BadRequest.badRequest(res, err.message);
     });
 };
 
